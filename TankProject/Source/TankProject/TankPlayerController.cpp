@@ -2,19 +2,36 @@
 
 #include "TankPlayerController.h"
 
+
+
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	ATank* PossesedTank = GetControllerTank();
-	if (PossesedTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Possesed Tank : %s"), *(PossesedTank->GetName()));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Tank Possesed"));
-	}
+}
+
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimTowardsCrosshair();
 }
 
 ATank* ATankPlayerController::GetControllerTank() const {
 	return Cast<ATank>(GetPawn());
+}
+
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (!GetControllerTank()) {
+		return;
+	}
+	FVector HitLocation;
+	if (GetSightRayHitLocation(HitLocation)) {
+		//UE_LOG(LogTemp, Warning, TEXT("Hit Position: %s"), *(HitLocation.ToString()));
+	}
+}
+
+bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
+{
+	HitLocation = FVector(1.f);
+	return true;
 }
